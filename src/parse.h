@@ -1,6 +1,6 @@
 
-#ifndef PARSE H
-#define PARSE H
+#ifndef PARSE_H
+#define PARSE_H
 
 #define HEADER_MAGIC 0x4c4c4144
 
@@ -22,7 +22,7 @@ struct employee_t
 int create_db_header(int fd, struct dbheader_t **headerOut);
 int validate_db_header(int fd, struct dbheader_t **headerOut);
 int read_employees(int fd, struct dbheader_t *, struct employee_t **employeesOut);
-void output_file(int fd, struct dbheader_t *dbhdr);
+int output_file(int fd, struct dbheader_t *dbhdr);
 
 
 #endif

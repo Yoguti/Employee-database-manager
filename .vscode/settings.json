@@ -5,6 +5,7 @@
         "bitset": "c",
         "hash_map": "c",
         "hash_set": "c",
-        "format": "c"
+        "format": "c",
+        "stdio.h": "c"
     }
 }

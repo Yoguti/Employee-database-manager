@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <getopt.h>
 #include "file.h"
 #include "common.h"
+#include <arpa/inet.h>
 #include "parse.h"
 
 void print_usage(char *argv[])
@@ -21,7 +23,7 @@ int main(int argc, char *argv[])
 	char *filepath = NULL;
 	int c;
 	bool newfile = false;
-	struct dbhdr_t *dbhdr = NULL;
+	struct dbheader_t *dbhdr = NULL;
 
 	while ((c = getopt(argc, argv, "nf:")) != -1)
 	{
@@ -58,27 +60,31 @@ int main(int argc, char *argv[])
 			printf("Unable to create database file\n");
 			return -1;
 		}
-		if (create_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
+		if (create_db_header(dbfd, &dbhdr) == STATUS_ERROR)
+		{
 			printf("Failed to create database header\n");
 			return -1;
 		}
 	}
-	dbfd = open_db_file(filepath);
-	if (dbfd < 0)
+	else
 	{
-		printf("Unable to open database file\n");
-		return -1;
-	}
-
-	if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
-		printf("Unable to validate database header file\n");
-		return -1;
+		dbfd = open_db_file(filepath);
+		if (dbfd < 0)
+		{
+			printf("Unable to open database file\n");
+			return -1;
+		}
+		if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR)
+		{
+			printf("Unable to validate database header file\n");
+			return -1;
+		}
 	}
 
 	printf("Newfile: %d\n", newfile);
 	printf("Filepath: %s\n", filepath);
 
 	output_file(dbfd, dbhdr);
-	
+
 	return 0;
 }

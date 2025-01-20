@@ -1,11 +1,14 @@
 #include "common.h"
 #include "parse.h"
 #include <stdio.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
-void output_file(int fd, struct dbheader_t *dbhdr) {
+
+int output_file(int fd, struct dbheader_t *dbhdr) {
 	if (fd < 0) {
 		printf("Bad FD from the user");
 		return STATUS_ERROR;
@@ -23,7 +26,7 @@ void output_file(int fd, struct dbheader_t *dbhdr) {
 
 int create_db_header(int fd, struct dbheader_t **headerOut) {
     struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
-    if (header == -1) {
+    if (header == NULL) {
 	printf("Calloc failed to create db header\n");
 	return STATUS_ERROR;
     }
@@ -44,7 +47,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 	}
 
 	struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
-	if (header == -1) {
+	if (header == NULL) {
 		printf("Calloc error");
 		return STATUS_ERROR;
 	}
