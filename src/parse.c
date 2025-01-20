@@ -5,6 +5,22 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+void output_file(int fd, struct dbheader_t *dbhdr) {
+	if (fd < 0) {
+		printf("Bad FD from the user");
+		return STATUS_ERROR;
+	}
+	dbhdr->magic = htonl(dbhdr->magic);
+	dbhdr->filesize = htonl(dbhdr->filesize);
+	dbhdr->count = htons(dbhdr->count);
+	dbhdr->version = htons(dbhdr->version);
+
+	lseek(fd, 0, SEEK_SET);
+	write(fd, dbhdr, sizeof(struct dbheader_t));
+
+}
+
+
 int create_db_header(int fd, struct dbheader_t **headerOut) {
     struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
     if (header == -1) {
@@ -61,7 +77,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 		free(header);
 		return -1;
 	}
-	
+	*headerOut = header;
 }
 
 

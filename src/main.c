@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include "file.h"
 #include "common.h"
+#include "parse.h"
 
 void print_usage(char *argv[])
 {
@@ -76,4 +77,8 @@ int main(int argc, char *argv[])
 
 	printf("Newfile: %d\n", newfile);
 	printf("Filepath: %s\n", filepath);
+
+	output_file(dbfd, dbhdr);
+	
+	return 0;
 }
