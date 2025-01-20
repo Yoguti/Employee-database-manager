@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	char *filepath = NULL;
 	int c;
 	bool newfile = false;
-	struct dbhdr_t *header = NULL;
+	struct dbhdr_t *dbhdr = NULL;
 
 	while ((c = getopt(argc, argv, "nf:")) != -1)
 	{
