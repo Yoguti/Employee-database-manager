@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 	char *filepath = NULL;
 	int c;
 	bool newfile = false;
+	struct dbhdr_t *header = NULL;
 
 	while ((c = getopt(argc, argv, "nf:")) != -1)
 	{
@@ -54,6 +55,10 @@ int main(int argc, char *argv[])
 		if (dbfd == STATUS_ERROR)
 		{
 			printf("Unable to create database file\n");
+			return -1;
+		}
+		if (create_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
+			printf("Failed to create database header\n");
 			return -1;
 		}
 	}

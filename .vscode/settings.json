@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "file.C": "cpp",
-        "file.h": "c"
+        "file.h": "c",
+        "bitset": "c",
+        "hash_map": "c",
+        "hash_set": "c",
+        "format": "c"
     }
 }
