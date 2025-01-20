@@ -69,6 +69,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
+		printf("Unable to validate database header file\n");
+		return -1;
+	}
+
 	printf("Newfile: %d\n", newfile);
 	printf("Filepath: %s\n", filepath);
 }
