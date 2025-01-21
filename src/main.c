@@ -23,16 +23,20 @@ int main(int argc, char *argv[])
 	char *filepath = NULL;
 	char *addstring = NULL;
 	int c;
-	bool newfile = false;
+	bool newfile = false; 
+	bool list = false;
 	struct dbheader_t *dbhdr = NULL;
 	struct employee_t *employees = NULL;
 
-	while ((c = getopt(argc, argv, "nf:a:")) != -1)
+	while ((c = getopt(argc, argv, "nf:a:l")) != -1)
 	{
 		switch (c)
 		{
 		case 'n':
 			newfile = true;
+			break;
+		case 'l':
+			list = true;
 			break;
 		case 'f':
 			filepath = optarg;
@@ -99,6 +103,10 @@ int main(int argc, char *argv[])
 		dbhdr->count++;
 		employees = realloc(employees, dbhdr->count * (sizeof(struct employee_t)));
 		add_employee(dbhdr, employees, addstring);
+	}
+
+	if(list) {
+		list_employees(dbhdr, employees);
 	}
 
 	output_file(dbfd, dbhdr, employees);
