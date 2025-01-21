@@ -8,13 +8,53 @@
 #include <stdlib.h>
 #include <string.h>
 
-void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
+int remove_employee(struct dbheader_t *dbhrd, struct employee_t **employees, char *name_id)
+{
 	int i = 0;
-	for(; i < dbhdr->count; i++) {
+	int j = -1;
+	for (; i < dbhrd->count; i++)
+	{
+		if (strcmp((*employees)[i].name, name_id) == 0)
+		{
+			j = i;
+		}
+	}
+
+	if (j != -1)
+	{
+		for (int i = j; i < dbhrd->count; i++)
+		{
+			(*employees)[i] = (*employees)[i + 1];
+		}
+	}
+	else
+	{
+		printf("Employee not found in database");
+		return STATUS_ERROR;
+	}
+
+	struct employee_t *temp = realloc(*employees, (dbhrd->count) * sizeof(struct employee_t));
+
+	if (temp == NULL && dbhrd->count > 0)
+	{
+		printf("Failed to reallocate memory.\n");
+		return STATUS_ERROR;
+	}
+
+	*employees = temp;
+
+	return STATUS_SUCESS;
+}
+
+void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees)
+{
+	int i = 0;
+	for (; i < dbhdr->count; i++)
+	{
 		printf("Employee d%\n", i);
 		printf("\tName: %s\n", employees[i].name);
 		printf("\tAddress: %s\n", employees[i].address);
-		printf("\tHours: %d\n", employees[i].hours);	 
+		printf("\tHours: %d\n", employees[i].hours);
 	}
 }
 
@@ -24,9 +64,9 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *a
 	char *addr = strtok(NULL, ",");
 	char *hours = strtok(NULL, ",");
 
-	strncpy(employees[dbhdr->count-1].name, name, sizeof(employees[dbhdr->count-1].name));
-	strncpy(employees[dbhdr->count-1].address, addr, sizeof(employees[dbhdr->count-1].address));
-	employees[dbhdr->count-1].hours = atoi(hours);
+	strncpy(employees[dbhdr->count - 1].name, name, sizeof(employees[dbhdr->count - 1].name));
+	strncpy(employees[dbhdr->count - 1].address, addr, sizeof(employees[dbhdr->count - 1].address));
+	employees[dbhdr->count - 1].hours = atoi(hours);
 
 	return STATUS_SUCESS;
 }
@@ -50,7 +90,8 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees)
 	write(fd, dbhdr, sizeof(struct dbheader_t));
 
 	int i = 0;
-	for (; i < realcount; i++) {
+	for (; i < realcount; i++)
+	{
 		employees[i].hours = htonl(employees[i].hours);
 		write(fd, &employees[i], sizeof(struct employee_t));
 	}

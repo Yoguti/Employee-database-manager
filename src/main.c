@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 	int dbfd = -1;
 	char *filepath = NULL;
 	char *addstring = NULL;
+	char *removestring = NULL;
 	int c;
 	bool newfile = false; 
 	bool list = false;
@@ -34,6 +35,9 @@ int main(int argc, char *argv[])
 		{
 		case 'n':
 			newfile = true;
+			break;
+		case 'r':
+			removestring = optarg;
 			break;
 		case 'l':
 			list = true;
@@ -107,6 +111,12 @@ int main(int argc, char *argv[])
 
 	if(list) {
 		list_employees(dbhdr, employees);
+	}
+
+	if (removestring) {
+		if (remove_employee(dbhdr, &employees, removestring) != STATUS_ERROR) {
+			dbhdr->count--;
+		}
 	}
 
 	output_file(dbfd, dbhdr, employees);

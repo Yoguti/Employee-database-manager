@@ -26,5 +26,10 @@ int validate_db_header(int fd, struct dbheader_t **headerOut);
 int read_employees(int fd, struct dbheader_t *, struct employee_t **employeesOut);
 int output_file(int fd, struct dbheader_t *dbhrd, struct employee_t *employees);
 
+int update_hours(int fd, struct dbheader_t *dbhrd, char *);
+int remove_employee(struct dbheader_t *dbhrd, struct employee_t *employees, char *);
+
+//remove employee
+//update their hours
 
 #endif
