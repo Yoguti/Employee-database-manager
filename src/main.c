@@ -9,11 +9,11 @@
 
 void print_usage(char *argv[])
 {
-
-	printf("Usage: %s -n -f <database file>\n", argv[0]);
-	printf("\t -n : create a new database file\n");
-	printf("\t -f : (required) file path to the database file\n");
-	return;
+    printf("Usage: %s -n -f <database file> [-a <string>]\n", argv[0]);
+    printf("\t -n : create a new database file\n");
+    printf("\t -f : (required) file path to the database file\n");
+    printf("\t -a : add string to database\n");
+    return;
 }
 
 int main(int argc, char *argv[])
@@ -21,11 +21,13 @@ int main(int argc, char *argv[])
 
 	int dbfd = -1;
 	char *filepath = NULL;
+	char *addstring = NULL;
 	int c;
 	bool newfile = false;
 	struct dbheader_t *dbhdr = NULL;
+	struct employee_t *employees = NULL;
 
-	while ((c = getopt(argc, argv, "nf:")) != -1)
+	while ((c = getopt(argc, argv, "nf:a:")) != -1)
 	{
 		switch (c)
 		{
@@ -35,9 +37,12 @@ int main(int argc, char *argv[])
 		case 'f':
 			filepath = optarg;
 			break;
+		case 'a':
+    		addstring = optarg;
+    		break;
 		case '?':
-			printf("Unknown option -%c\n", c);
-			break;
+		    print_usage(argv);
+    		return -1;
 		default:
 			return -1;
 		}
@@ -66,6 +71,7 @@ int main(int argc, char *argv[])
 			return -1;
 		}
 	}
+
 	else
 	{
 		dbfd = open_db_file(filepath);
@@ -84,7 +90,18 @@ int main(int argc, char *argv[])
 	printf("Newfile: %d\n", newfile);
 	printf("Filepath: %s\n", filepath);
 
-	output_file(dbfd, dbhdr);
+	if (read_employees(dbfd, dbhdr, &employees) != STATUS_SUCESS) {
+			printf("Unable to read employees\n");
+			return -1;		
+	}
+
+	if (addstring) {
+		dbhdr->count++;
+		employees = realloc(employees, dbhdr->count * (sizeof(struct employee_t)));
+		add_employee(dbhdr, employees, addstring);
+	}
+
+	output_file(dbfd, dbhdr, employees);
 
 	return 0;
 }
