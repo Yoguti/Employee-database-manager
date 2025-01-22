@@ -19,14 +19,63 @@ This project is a command-line utility to manage an employee database stored in 
   - `<stdbool.h>`: For boolean data type support.
   - `<getopt.h>`: For command-line argument parsing.
   - `<arpa/inet.h>`: For network byte order conversions.
-  - Custom headers:
-    - `file.h`
-    - `common.h`
-    - `parse.h`
+- **Custom headers**:
+  - `file.h`: Functions for file creation, opening, and validation.
+  - `common.h`: Shared constants.
+  - `parse.h`: Functions to parse and manipulate employee data.`
 
-## Usage
+#### Options:
+| Option         | Description                                       |
+|----------------|---------------------------------------------------|
+| `-n`           | Create a new database file.                      |
+| `-f <filepath>`| Specify the database file (required).            |
+| `-a <string>`  | Add an employee to the database.                 |
+| `-r <string>`  | Remove an employee from the database.            |
+| `-h <string>`  | Update hours worked for a specific employee.     |
+| `-l`           | List all employees in the database.              |
 
-### Command-Line Arguments
+### Example Usage
 
+1. **Create a new database file**:
+   ```bash
+   ./employee_db_manager -n -f employees.db
+   ```
+
+2. **Add an employee**:
+   ```bash
+   ./employee_db_manager -f employees.db -a "John Doe,Software Engineer,40"
+   ```
+
+3. **Remove an employee**:
+   ```bash
+   ./employee_db_manager -f employees.db -r "John Doe"
+   ```
+
+4. **Update hours**:
+   ```bash
+   ./employee_db_manager -f employees.db -h "John Doe,45"
+   ```
+
+5. **List all employees**:
+   ```bash
+   ./employee_db_manager -f employees.db -l
+   ```
+
+### Build Instructions
+
+To compile the project, simply run:
 ```bash
-./employee_db_manager -n -f <database file> [-a <string>] [-r <string>] [-h <string>] [-l]
+make
+```
+This will generate the executable in the `bin/` directory. To run the program, use:
+```bash
+make run
+```
+If you want to clean the build files, use:
+```bash
+make clean
+```
+
+
+
+
