@@ -9,11 +9,13 @@
 
 void print_usage(char *argv[])
 {
-    printf("Usage: %s -n -f <database file> [-a <string>]\n", argv[0]);
-    printf("\t -n : create a new database file\n");
-    printf("\t -f : (required) file path to the database file\n");
-    printf("\t -a : add string to database\n");
-    return;
+	printf("Usage: %s -n -f <database file> [-a <string>]\n", argv[0]);
+	printf("\t -n : create a new database file\n");
+	printf("\t -f : (required) file path to the database file\n");
+	printf("\t -a : add string to database\n");
+	printf("\t -r : remove employee from database\n");
+	printf("\t -h : update employe hours\n");
+	return;
 }
 
 int main(int argc, char *argv[])
@@ -25,7 +27,7 @@ int main(int argc, char *argv[])
 	char *hourstring = NULL;
 	char *removestring = NULL;
 	int c;
-	bool newfile = false; 
+	bool newfile = false;
 	bool list = false;
 	struct dbheader_t *dbhdr = NULL;
 	struct employee_t *employees = NULL;
@@ -35,7 +37,7 @@ int main(int argc, char *argv[])
 		switch (c)
 		{
 		case 'u':
-			hourstring = true;
+			hourstring = optarg;
 			break;
 		case 'n':
 			newfile = true;
@@ -50,11 +52,11 @@ int main(int argc, char *argv[])
 			filepath = optarg;
 			break;
 		case 'a':
-    		addstring = optarg;
-    		break;
+			addstring = optarg;
+			break;
 		case '?':
-		    print_usage(argv);
-    		return -1;
+			print_usage(argv);
+			return -1;
 		default:
 			return -1;
 		}
@@ -102,37 +104,46 @@ int main(int argc, char *argv[])
 	printf("Newfile: %d\n", newfile);
 	printf("Filepath: %s\n", filepath);
 
-	if (read_employees(dbfd, dbhdr, &employees) != STATUS_SUCESS) {
-			printf("Unable to read employees\n");
-			return -1;		
+	if (read_employees(dbfd, dbhdr, &employees) != STATUS_SUCESS)
+	{
+		printf("Unable to read employees\n");
+		return -1;
 	}
 
-	if (addstring) {
+	if (addstring)
+	{
 		dbhdr->count++;
 		employees = realloc(employees, dbhdr->count * (sizeof(struct employee_t)));
 		add_employee(dbhdr, employees, addstring);
 	}
 
-	if(list) {
+	if (list)
+	{
 		list_employees(dbhdr, employees);
 	}
 
-	if (removestring) {
-		if (remove_employee(dbhdr, &employees, removestring) != STATUS_ERROR) {
+	if (removestring)
+	{
+		if (remove_employee(dbhdr, &employees, removestring) != STATUS_ERROR)
+		{
 			dbhdr->count--;
 		}
 	}
-	
-	if(hourstring) {
-		int hour = atoi(hourstring);
-		
-		if (update_hours(dbhdr, &employees, hours) != STATUS_ERROR) {
 
-		}
-
+	if (hourstring)
+	{
+		update_hours(dbhdr, &employees, hourstring);
 	}
 
 	output_file(dbfd, dbhdr, employees);
+	if (employees)
+	{
+		free(employees);
+	}
 
+	if (dbhdr)
+	{
+		free(dbhdr);
+	}
 	return 0;
 }
