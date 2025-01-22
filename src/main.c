@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 	int dbfd = -1;
 	char *filepath = NULL;
 	char *addstring = NULL;
+	char *hourstring = NULL;
 	char *removestring = NULL;
 	int c;
 	bool newfile = false; 
@@ -29,10 +30,13 @@ int main(int argc, char *argv[])
 	struct dbheader_t *dbhdr = NULL;
 	struct employee_t *employees = NULL;
 
-	while ((c = getopt(argc, argv, "nf:a:l")) != -1)
+	while ((c = getopt(argc, argv, "nf:a:lr:h:")) != -1)
 	{
 		switch (c)
 		{
+		case 'u':
+			hourstring = true;
+			break;
 		case 'n':
 			newfile = true;
 			break;
@@ -117,6 +121,15 @@ int main(int argc, char *argv[])
 		if (remove_employee(dbhdr, &employees, removestring) != STATUS_ERROR) {
 			dbhdr->count--;
 		}
+	}
+	
+	if(hourstring) {
+		int hour = atoi(hourstring);
+		
+		if (update_hours(dbhdr, &employees, hours) != STATUS_ERROR) {
+
+		}
+
 	}
 
 	output_file(dbfd, dbhdr, employees);

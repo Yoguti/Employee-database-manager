@@ -8,6 +8,26 @@
 #include <stdlib.h>
 #include <string.h>
 
+int update_hours(struct dbheader_t *dbhrd, struct employee_t *employees, char *info) {
+	char *name = strtok(info, ",");
+	int hours = atoi(strtok(NULL, ","));
+	int check = -1;
+	int i = 0;
+	for (;i < dbhrd->count; i++) {
+		if (strcmp((employees)[i].name, name) == 0)
+		{
+			employees[i].hours += hours;
+			check = 1;
+		}
+	}
+	if (check == 1) {
+		return STATUS_SUCESS;
+	} else {
+		return STATUS_ERROR;
+	}
+
+}
+
 int remove_employee(struct dbheader_t *dbhrd, struct employee_t **employees, char *name_id)
 {
 	int i = 0;
@@ -22,7 +42,7 @@ int remove_employee(struct dbheader_t *dbhrd, struct employee_t **employees, cha
 
 	if (j != -1)
 	{
-		for (int i = j; i < dbhrd->count; i++)
+		for (int i = j; i < dbhrd->count - 1; i++)
 		{
 			(*employees)[i] = (*employees)[i + 1];
 		}
@@ -33,7 +53,7 @@ int remove_employee(struct dbheader_t *dbhrd, struct employee_t **employees, cha
 		return STATUS_ERROR;
 	}
 
-	struct employee_t *temp = realloc(*employees, (dbhrd->count) * sizeof(struct employee_t));
+	struct employee_t *temp = realloc(*employees, (dbhrd->count - 1) * sizeof(struct employee_t));
 
 	if (temp == NULL && dbhrd->count > 0)
 	{

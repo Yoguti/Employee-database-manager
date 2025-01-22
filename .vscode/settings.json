@@ -6,6 +6,10 @@
         "hash_map": "c",
         "hash_set": "c",
         "format": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "chrono": "c",
+        "text_encoding": "c",
+        "typeindex": "c",
+        "typeinfo": "c"
     }
 }
