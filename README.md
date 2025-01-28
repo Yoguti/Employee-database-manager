@@ -13,12 +13,6 @@ This project is a command-line utility to manage an employee database stored in 
 ## Requirements
 
 - **C Compiler**: GCC or any C99-compliant compiler.
-- **Libraries**: The following headers are used:
-  - `<stdio.h>`: For input/output operations.
-  - `<stdlib.h>`: For memory management.
-  - `<stdbool.h>`: For boolean data type support.
-  - `<getopt.h>`: For command-line argument parsing.
-  - `<arpa/inet.h>`: For network byte order conversions.
 - **Custom headers**:
   - `file.h`: Functions for file creation, opening, and validation.
   - `common.h`: Shared constants.
